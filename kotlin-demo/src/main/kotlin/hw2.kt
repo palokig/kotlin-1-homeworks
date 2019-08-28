@@ -1,9 +1,9 @@
 fun main() {
     val growth = 1.8
     val weightPerson = 80
-    val index = bodyMassIndex(weightPerson.toFloat(), growth.toFloat())
+    var index = bodyMassIndex(weightPerson.toFloat(), growth.toFloat())
 
-    val verdict = when(index) {
+    var verdict = when(index) {
         in 0F..16.0F -> "Выраженный дефицит массы тела"
         in 16F..18.5F -> "Недостаточная (дефицит) масса тела"
         in 18.5F..24.99F -> "Норма"
@@ -14,7 +14,7 @@ fun main() {
     }
 
         println(verdict)
-        println(index)
+        //println(index)
 }
 
 
