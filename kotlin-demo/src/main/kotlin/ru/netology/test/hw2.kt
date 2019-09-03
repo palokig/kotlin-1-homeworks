@@ -1,3 +1,7 @@
+package ru.netology.test
+
+import ru.netology.kotlin.calculateFee
+
 fun main() {
     val growth = 1.8
     val weightPerson = 80
@@ -15,6 +19,13 @@ fun main() {
 
         println(verdict)
         //println(index)
+
+
+    val amount = 200 // стоимость текущей продажи
+    val total = 50_001 // сумма предыдущих продаж
+    val exclusive = true
+    var fee = calculateFee(amount, total)
+    println(fee)
 }
 
 

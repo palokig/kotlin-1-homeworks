@@ -1,3 +1,5 @@
+package ru.netology.kotlin
+
 fun main() {
     val amount = 200 // стоимость текущей продажи
     val total = 50_001 // сумма предыдущих продаж
@@ -19,9 +21,9 @@ fun calculateFee(amount: Int, total: Int, exclusive: Boolean = false): Int {
    */
 
     var sale = when {
-        compareSales(total,1_000) -> 30
-        compareSales(total,10_000) -> 25
-        compareSales(total,50_000) -> 20
+        compareSales(total, 1_000) -> 30
+        compareSales(total, 10_000) -> 25
+        compareSales(total, 50_000) -> 20
         else -> 15
     }
 
