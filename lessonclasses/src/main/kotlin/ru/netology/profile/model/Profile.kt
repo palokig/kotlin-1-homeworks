@@ -1,16 +1,16 @@
 package ru.netology.profile.model
 
 
-class Avatar (
+class Avatar(
     val urlPhoto: String,
-    val name:  String
+    val name: String
 )
 
-enum class Status{
-    ЗАНЯТ, СВОБОДЕН
+enum class Status {
+    BUSY, FREE
 }
 
-class Profile (
+class Profile(
     val id: Int,
     val login: String,
     val firstName: String,
@@ -20,20 +20,3 @@ class Profile (
     val fullName: String = firstName + " " + lastName
 )
 
-fun main() {
-    val valueAvatar = Avatar("urlPhotontext","nameText")
-    val valueStatus = Status.ЗАНЯТ
-    val valueProfile = Profile(55,
-        "test",
-        "Иван" ,
-        "Иванов",
-        valueStatus,
-        valueAvatar)
-
-    println(valueProfile.fullName)
-
-    println(valueProfile.status)
-    println(valueProfile.avatar.name)
-    println(valueProfile.status)
-
-}

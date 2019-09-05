@@ -48,4 +48,3 @@ fun main() {
     val repost = Repost(1,2,5,4,"ds","ds","ds")
     repost.likeNumber(1)
 }
-
