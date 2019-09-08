@@ -32,5 +32,5 @@ fun main() {
     println(valueProfile.status)
 
 
-    ViewGroup(View()).click()
+
 }
