@@ -1,10 +1,14 @@
-package ru.netology.kotlin.first_app_3
+package ru.netology.kotlin.func
 
+import android.content.Intent
+import android.content.Intent.ACTION_SEND
 import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class Post (
     val id: Long,
@@ -16,8 +20,11 @@ class Post (
     var postByMe: Boolean = false,
     var numberPost: Long,
     var shareByMe: Boolean = false,
-    var numberShare: Long
+    var numberShare: Long,
+    var urlVideoContent:String
 )
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,22 +32,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val post = Post(1, "Vasya", "First post in our network!",
+        val post = Post(1, "Vasya", "тест First post in our network!",
             72100,false,0,true,
-            20,true,15)
+            20,true,15,"")
 
         createdTv.text = whenPublishedPresentation(post.created)
         contentTv.text = post.content
         nameUserTv.text = post.author
 
+        // управление favorite
         if (post.likedByMe) {
-            likeBtn.setImageResource(R.drawable.ic_favorite_active_24dp)
-            numberLikedTv.setTextColor(Color.RED)
+            favoriteActive()
         }
         numberLikedTv.text = post.numberLiked.toString()
-        if (post.numberLiked == 0.toLong()) {
-            numberLikedTv.setVisibility(View.GONE);
+        favoriteSetVisibility(post.numberLiked)
+        likeBtn.setOnClickListener {
+            post.likedByMe = !post.likedByMe
+            if (post.likedByMe) {
+                favoriteActive()
+                post.numberLiked = post.numberLiked + 1
+            }
+            else {
+                favoriteInactive()
+                post.numberLiked = post.numberLiked - 1
+            }
+            favoriteSetVisibility(post.numberLiked)
+            numberLikedTv.text = post.numberLiked.toString()
         }
+
+
 
         if (post.postByMe) {
             postByMeBtn.setImageResource(R.drawable.ic_chat_bubble_active_24dp)
@@ -61,10 +81,74 @@ class MainActivity : AppCompatActivity() {
             numberShareTv.setVisibility(View.GONE);
         }
 
+        shareByMeTv.setOnClickListener {
 
+                val intent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    putExtra(Intent.EXTRA_TEXT,
+                        """
+                    ${post.author} (${post.created})
+                    ${post.content}
+                    """.trimIndent())
+                    type = "text/plain"
+                }
+                startActivity(intent)
+            }
+
+
+
+        locationBtn.setOnClickListener{
+
+            val intent = Intent().apply {
+                Intent.ACTION_VIEW
+
+                val location = Pair(55.75222, 37.61556)
+                val lat = location.first
+                val lng = location.second
+                data = Uri.parse("geo:$lat,$lng")
+            }
+            startActivity(intent)
+
+        }
+
+
+        if (post.urlVideoContent == "") {
+            youtubeBtn.setVisibility(View.GONE);
+        }
+        youtubeBtn.setOnClickListener{
+
+            val intent = Intent().apply {
+                Intent.ACTION_VIEW
+                data = Uri.parse(post.urlVideoContent)
+            }
+            startActivity(intent)
+        }
 
     }
+
+     fun favoriteActive() {
+        likeBtn.setImageResource(R.drawable.ic_favorite_active_24dp)
+        numberLikedTv.setTextColor(Color.RED)
+    }
+
+    fun favoriteInactive(){
+        likeBtn.setImageResource(R.drawable.ic_favorite_inactive_24dp)
+        numberLikedTv.setTextColor(Color.parseColor("#EEEEEE"))
+    }
+
+    fun favoriteSetVisibility(numberLiked:Long){
+        if (numberLiked == 0.toLong()) {
+            numberLikedTv.setVisibility(View.GONE);
+        }
+        else {
+            numberLikedTv.setVisibility(View.VISIBLE);
+        }
+    }
+
+
 }
+
+
 
 fun whenPublishedPresentation(publishedAgo: Long): String {
 
