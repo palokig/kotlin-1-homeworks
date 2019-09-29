@@ -10,21 +10,6 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
-class Post (
-    val id: Long,
-    val author: String,
-    val content: String,
-    val created: Long, // пока строка
-    var likedByMe: Boolean = false,
-    var numberLiked: Long,
-    var postByMe: Boolean = false,
-    var numberPost: Long,
-    var shareByMe: Boolean = false,
-    var numberShare: Long,
-    var urlVideoContent:String
-)
-
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,53 +17,32 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val post = Post(1, "Vasya", "тест First post in our network!",
-            72100,false,0,true,
+
+
+        var post:Post = Post(1, "Vasya", "тест First post in our network!",
+            72100,true,1,true,
             20,true,15,"")
 
-        createdTv.text = whenPublishedPresentation(post.created)
-        contentTv.text = post.content
-        nameUserTv.text = post.author
+        updatePost(post)
 
-        // управление favorite
-        if (post.likedByMe) {
-            favoriteActive()
-        }
-        numberLikedTv.text = post.numberLiked.toString()
-        favoriteSetVisibility(post.numberLiked)
+
         likeBtn.setOnClickListener {
-            post.likedByMe = !post.likedByMe
-            if (post.likedByMe) {
-                favoriteActive()
-                post.numberLiked = post.numberLiked + 1
+
+            post = post.copy(post,
+                likedByMe = !post.likedByMe
+            )
+            updatePost(post)
+        }
+
+
+        youtubeBtn.setOnClickListener{
+
+            val intent = Intent().apply {
+                Intent.ACTION_VIEW
+                data = Uri.parse(post.urlVideoContent)
             }
-            else {
-                favoriteInactive()
-                post.numberLiked = post.numberLiked - 1
-            }
-            favoriteSetVisibility(post.numberLiked)
-            numberLikedTv.text = post.numberLiked.toString()
-        }
-
-
-
-        if (post.postByMe) {
-            postByMeBtn.setImageResource(R.drawable.ic_chat_bubble_active_24dp)
-            numberPostTv.setTextColor(Color.RED)
-        }
-        numberPostTv.text = post.numberPost.toString()
-        if (post.numberPost == 0.toLong()) {
-            numberPostTv.setVisibility(View.GONE);
-        }
-
-
-        if (post.shareByMe) {
-            shareByMeTv.setImageResource(R.drawable.ic_share_active_24dp)
-            numberShareTv.setTextColor(Color.RED)
-        }
-        numberShareTv.text = post.numberShare.toString()
-        if (post.numberShare == 0.toLong()) {
-            numberShareTv.setVisibility(View.GONE);
+            startActivity(intent)
+            updatePost(post)
         }
 
         shareByMeTv.setOnClickListener {
@@ -93,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                     type = "text/plain"
                 }
                 startActivity(intent)
+                updatePost(post)
             }
 
 
@@ -108,21 +73,11 @@ class MainActivity : AppCompatActivity() {
                 data = Uri.parse("geo:$lat,$lng")
             }
             startActivity(intent)
-
+            updatePost(post)
         }
 
 
-        if (post.urlVideoContent == "") {
-            youtubeBtn.setVisibility(View.GONE);
-        }
-        youtubeBtn.setOnClickListener{
 
-            val intent = Intent().apply {
-                Intent.ACTION_VIEW
-                data = Uri.parse(post.urlVideoContent)
-            }
-            startActivity(intent)
-        }
 
     }
 
@@ -142,6 +97,46 @@ class MainActivity : AppCompatActivity() {
         }
         else {
             numberLikedTv.setVisibility(View.VISIBLE);
+        }
+    }
+
+    fun updatePost(post:Post){
+        createdTv.text = whenPublishedPresentation(post.created)
+        contentTv.text = post.content
+        nameUserTv.text = post.author
+        numberLikedTv.text = post.numberLiked.toString()
+        // управление favorite
+        if (post.likedByMe) {
+            favoriteActive()
+        }
+        else {
+            favoriteInactive()
+        }
+
+
+        favoriteSetVisibility(post.numberLiked)
+
+
+
+        if (post.postByMe) {
+            postByMeBtn.setImageResource(R.drawable.ic_chat_bubble_active_24dp)
+            numberPostTv.setTextColor(Color.RED)
+        }
+        numberPostTv.text = post.numberPost.toString()
+        if (post.numberPost == 0.toLong()) {
+            numberPostTv.setVisibility(View.GONE);
+        }
+
+        if (post.shareByMe) {
+            shareByMeTv.setImageResource(R.drawable.ic_share_active_24dp)
+            numberShareTv.setTextColor(Color.RED)
+        }
+        numberShareTv.text = post.numberShare.toString()
+        if (post.numberShare == 0.toLong()) {
+            numberShareTv.setVisibility(View.GONE);
+        }
+        if (post.urlVideoContent == "") {
+            youtubeBtn.setVisibility(View.GONE);
         }
     }
 
