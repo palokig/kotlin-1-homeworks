@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         var post:Post = Post(1, "Vasya", "тест First post in our network!",
             72100,true,1,true,
-            20,true,15,"")
+            20,true,15,"","55.753061","37.613854",PostType.EVENT)
 
         updatePost(post)
 
@@ -67,9 +67,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent().apply {
                 Intent.ACTION_VIEW
 
-                val location = Pair(55.75222, 37.61556)
-                val lat = location.first
-                val lng = location.second
+                //val location = Pair(55.75222, 37.61556)
+                val lat = post.addressFirst
+                val lng = post.addressSecond
                 data = Uri.parse("geo:$lat,$lng")
             }
             startActivity(intent)
@@ -115,7 +115,6 @@ class MainActivity : AppCompatActivity() {
 
 
         favoriteSetVisibility(post.numberLiked)
-
 
 
         if (post.postByMe) {

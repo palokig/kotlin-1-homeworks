@@ -1,5 +1,7 @@
 package ru.netology.kotlin.func
 
+import java.util.*
+
 class Post (
     val id: Long,
     val author: String,
@@ -11,7 +13,10 @@ class Post (
     val numberPost: Long,
     val shareByMe: Boolean = false,
     val numberShare: Long,
-    val urlVideoContent:String
+    val urlVideoContent:String,
+    val addressFirst:String? = null,
+    val addressSecond:String? = null,
+    val type: PostType = PostType.POST
 ) {
     fun copy(post:Post,likedByMe: Boolean) :Post{
         return Post(
