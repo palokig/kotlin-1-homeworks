@@ -1,14 +1,15 @@
 package ru.netology.kotlin.func
 
 import android.content.Intent
-import android.content.Intent.ACTION_SEND
 import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
+import ru.netology.kotlin.func.dto.Post
+import ru.netology.kotlin.func.dto.list
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,19 +18,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        with(container) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = PostAdapter(list)
+        }
 
 
-        var post:Post = Post(1, "Vasya", "тест First post in our network!",
-            72100,true,1,true,
-            20,true,15,"","55.753061","37.613854",PostType.EVENT)
+        /*
 
         updatePost(post)
 
 
         likeBtn.setOnClickListener {
 
-            post = post.copy(post,
-                likedByMe = !post.likedByMe
+            post = post.copy(
+                likedByMe = !post.likedByMe,
+                numberLiked = if (!post.likedByMe) post.numberLiked + 1 else post.numberLiked - 1
             )
             updatePost(post)
         }
@@ -100,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun updatePost(post:Post){
+    fun updatePost(post: Post){
         createdTv.text = whenPublishedPresentation(post.created)
         contentTv.text = post.content
         nameUserTv.text = post.author
@@ -136,7 +140,7 @@ class MainActivity : AppCompatActivity() {
         }
         if (post.urlVideoContent == "") {
             youtubeBtn.setVisibility(View.GONE);
-        }
+        }*/
     }
 
 
@@ -144,30 +148,3 @@ class MainActivity : AppCompatActivity() {
 
 
 
-fun whenPublishedPresentation(publishedAgo: Long): String {
-
-    val manyDays:Long = 86400
-    val twoDays:Long = manyDays * 2
-    val fewYearsAgo:Long = (manyDays*356)*2
-    val YearsAgo:Long = manyDays*356
-    val manyMonths:Long = manyDays*31
-    val manyWeeks:Long = manyDays*7
-
-
-    var verdict = when(publishedAgo) {
-        in 0..59 -> "менее минуты назад"
-        in 60..90 -> "минуту назад"
-        in 90..360 -> " 6 минут назад"
-        in 360..3600 -> "час назад"
-        in 3600..7200 -> "2 часа назад"
-        in 7200..manyDays -> "несколько часов назад"
-        in manyDays..twoDays -> "более суток назад"
-        in twoDays..manyWeeks -> "более недели назад"
-        in manyWeeks..manyMonths -> "более месяца назад"
-        in manyMonths..YearsAgo -> "год назад"
-        in YearsAgo..fewYearsAgo -> "несколько лет назад"
-        else -> "несколько лет назад"
-    }
-
-    return verdict
-}
